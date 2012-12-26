@@ -6,7 +6,7 @@
 #require 'controllers/email'
 #require 'controllers/emails'
 
-require 'controllers/application'
-require 'controllers/signup'
-require 'controllers/login'
-require 'controllers/navbar'
+#require 'controllers/application'
+#require 'controllers/signup'
+#require 'controllers/login'
+#require 'controllers/navbar'

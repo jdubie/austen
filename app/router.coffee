@@ -8,28 +8,53 @@ debug = require('debug') 'DEBUG router'
 
 App.Router.map (match) ->
   match('/').to('home')
-  match('/signup').to('signup')
-  match('/login').to('login')
-  #match('/:feed_id').to('/feed')
-  #match('/:feed_id/:post_id').to('/feed')
 
 App.ApplicationView = Em.View.extend
   templateName: require('templates/application')
 
-App.CurrentUser = Em.Object.create
+App.ApplicationController = Em.Controller.extend
+  currentUser: null
+
+App.CurrentUser = Em.Object.extend
   username: null
+  loggedIn: (() ->
+    not @get('username')
+  ).property('username')
+
+
+App.LinkObject = Em.Object.extend
+  url: null
+  saved: false
+  notSaved: (() ->
+    not @get('saved')
+  ).property('saved')
 
 App.HomeRoute = Em.Route.extend
   setupControllers: (controller) ->
-    console.log 'setup controllers'
-    #link = App.Link.create
-    #controller.set('link', link)
+    link = App.LinkObject.create url: window.location.href
+    user = App.CurrentUser.create()
+    controller.set('link', link)
+    controller.set('user', user)
 
-    # check if logged in
-    #$.getJSON('/session').statusCode
+    ## check if logged in
+    #opts =
+    #  url: '//m.com:3005/session'
+    #  dataType: 'jsonp'
+    #$.ajax(opts).statusCode
     #  200: (user) ->
-    #    App.CurrentUser.set 'username', user.username
+    #    console.log 'hwefwe'
+    #    user.set 'username', 'user-who-is-signed'
     #  403: -> console.log '403'
 
-App.SignupRoute = Em.Route.extend {}
-App.LoginRoute = Em.Route.extend {}
+App.HomeController = Em.Controller.extend
+  link: null
+  user: null
+  containerClass: null
+
+App.HomeView = Em.View.extend
+  didInsertElement: -> @$().hide().fadeIn('slow')
+  templateName: require 'templates/home'
+  testFoo: (a,b) ->
+    this.get('controller').set('link', a.context)
+    #console.log 'clickkk', a.context.get('title')
+
